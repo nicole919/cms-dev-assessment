@@ -1,41 +1,41 @@
 import React, { Component } from "react";
-import ListingCard from "./ListingCard";
-import { getListings } from "./api";
-import "./App.css";
+import { Switch, Route } from "react-router-dom";
+import Nav from "./Nav";
+import Grid from "./Grid";
+import "./app.css";
 
 class App extends Component {
-  state = {
-    listings: [],
-    events: [],
-    offers: []
-  };
-
-  componentDidMount() {
-    getListings().then(({ listings, meta }) => {
-      this.setState({ listings });
-    });
-  }
   render() {
     return (
       <div className="App">
-        <div className="card-grid">
-          {this.state.listings.map((listing, index) => {
-            let positionClassName = "card";
-            if (index % 5 === 0) {
-              positionClassName = "verticalCard";
-            }
-            if (index === 0 || index % 6 === 0) {
-              positionClassName = "largeCard";
-            }
-            return (
-              <ListingCard
-                className={positionClassName}
-                listing={listing}
-                key={listing.recid}
-              />
-            );
-          })}
-        </div>
+        <nav>
+          <Nav />
+        </nav>
+
+        <main>
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={props => <Grid filter="all" {...props} />}
+            />
+            <Route
+              exact
+              path="/listings"
+              render={props => <Grid filter="listings" {...props} />}
+            />
+            <Route
+              exact
+              path="/events"
+              render={props => <Grid filter="events" {...props} />}
+            />
+            <Route
+              exact
+              path="/offers"
+              render={props => <Grid filter="offers" {...props} />}
+            />
+          </Switch>
+        </main>
       </div>
     );
   }

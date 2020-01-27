@@ -1,8 +1,8 @@
 import React, { Component } from "react";
+import "./EventsCard.css";
 import fallback from "./fallback.jpg";
-import "./ListingCard.css";
 
-export default class ListingCard extends Component {
+export default class EventsCard extends Component {
   state = {
     shouldLoadFallback: false
   };
@@ -22,9 +22,6 @@ export default class ListingCard extends Component {
         </div>
         <h4 className="listing-title">{this.props.listing.title}</h4>
         <p className="listing-body">{this.props.listing.description}</p>
-        <div className="read-more">
-          <button>Read more</button>
-        </div>
       </div>
     );
   }

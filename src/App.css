@@ -1,35 +1,28 @@
-.App {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-left: 18px;
-  padding-right: 18px;
+.NavLink {
+  background-color: #ececec;
+  border-radius: 3px;
+  padding: 8px;
+  margin-right: 12px;
+  text-decoration: none;
+  position: relative;
 }
 
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  grid-column-gap: 18px;
-  grid-row-gap: 18px;
+.NavLink.active {
+  background-color: #663399;
+  color: white;
+}
+.NavLink.active::after {
+  content: "";
+  border: 1.5px solid white;
+  border-radius: 3px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
 }
 
-@media (min-width: 640px) {
-  .card-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .App {
-    padding: 0;
-  }
-  .card-grid {
-    grid-template-columns: repeat(8, 1fr);
-  }
-  .card {
-    grid-column: span 2;
-  }
-  .largeCard,
-  .verticalCard {
-    grid-column: span 4;
-  }
+.nav-container {
+  display: flex;
+  margin: 5px 12px;
 }

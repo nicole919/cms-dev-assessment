@@ -1,5 +1,4 @@
 .listing {
-  position: relative;
   display: grid;
   max-height: 50vh;
   grid-template-areas:
@@ -50,35 +49,5 @@
   .listing.verticalCard .listing-img img {
     height: 100%;
     object-fit: cover;
-  }
-  .read-more button {
-    background-color: red;
-    color: white;
-    border: none;
-    border-radius: 2px;
-    padding: 10px;
-  }
-  .read-more button:hover {
-    background-color: #b51c0e;
-    color: white;
-    border: none;
-    border-radius: 2px;
-    padding: 10px;
-  }
-  .listing.verticalCard .read-more {
-    left: 50%;
-  }
-  .read-more {
-    position: absolute;
-    bottom: 10px;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: center;
-    transform: translate(0px, 50px);
-    transition: transform 150ms ease;
-  }
-  .listing:hover .read-more {
-    transform: translate(0px, 0px);
   }
 }
