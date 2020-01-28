@@ -3,43 +3,53 @@ import { getListings } from "../api";
 import PhotoGrid from "./photo-grid";
 import "./listings-pager.css";
 
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
+
 export default class ListingsPager extends Component {
   state = {
     listings: [],
     currentPage: 0,
     numPages: 4,
-    gridClassName: "five-column-left",
-    pagedListings: []
+    gridClassName: "five-column-left"
   };
 
-  componentDidMount() {
-    getListings(15).then(({ listings, meta }) => {
-      this.setState(
-        {
-          listings
-        },
-        () => {
-          this.setState({
-            pagedListings: this.getPagedListings(this.state.currentPage)
-          });
-        }
-      );
+  fetchListings(page, pageSize) {
+    getListings(page, pageSize).then(({ listings, meta }) => {
+      this.setState({
+        listings
+      });
     });
   }
 
+  componentDidMount() {
+    const pageData = this.getPagedListings(this.state.currentPage);
+    this.fetchListings(pageData.page, pageData.pageSize);
+  }
+
   getPagedListings(currentPage) {
-    if (currentPage === 0) {
-      return this.state.listings.slice(0, 5);
-    }
-    if (currentPage === 1) {
-      return this.state.listings.slice(5, 10);
+    let availablePages;
+    let totalListingsCount = 20;
+    let perPage;
+
+    if (currentPage === 0 || currentPage === 1) {
+      perPage = 5;
+      availablePages = totalListingsCount / 5; // total listing count
     }
     if (currentPage === 2) {
-      return this.state.listings.slice(10, 13);
+      perPage = 3;
+      availablePages = Math.ceil(totalListingsCount / 3);
     }
     if (currentPage === 3) {
-      return this.state.listings.slice(13, 15);
+      perPage = 2;
+      availablePages = totalListingsCount / 2;
     }
+
+    const randomPageNumber = getRandomInt(1, availablePages + 1);
+    return { page: randomPageNumber, pageSize: perPage };
   }
   pageToGridClassName(pageNumber) {
     if (pageNumber === 0) {
@@ -57,32 +67,42 @@ export default class ListingsPager extends Component {
   }
   onNextClick = e => {
     e.preventDefault();
-    this.setState(prevState => {
-      let newValue = (prevState.currentPage + 1) % prevState.numPages;
-      return {
-        currentPage: newValue,
-        gridClassName: this.pageToGridClassName(newValue),
-        pagedListings: this.getPagedListings(newValue)
-      };
-    });
+    this.setState(
+      prevState => {
+        let newValue = (prevState.currentPage + 1) % prevState.numPages;
+        return {
+          currentPage: newValue,
+          gridClassName: this.pageToGridClassName(newValue)
+        };
+      },
+      () => {
+        const pageData = this.getPagedListings(this.state.currentPage);
+        this.fetchListings(pageData.page, pageData.pageSize);
+      }
+    );
   };
   onPrevClick = e => {
     e.preventDefault();
 
-    this.setState(prevState => {
-      let newValue;
-      if (prevState.currentPage - 1 === -1) {
-        newValue = prevState.numPages - 1;
-      } else {
-        newValue = prevState.currentPage - 1;
-      }
+    this.setState(
+      prevState => {
+        let newValue;
+        if (prevState.currentPage - 1 === -1) {
+          newValue = prevState.numPages - 1;
+        } else {
+          newValue = prevState.currentPage - 1;
+        }
 
-      return {
-        currentPage: newValue,
-        gridClassName: this.pageToGridClassName(newValue),
-        pagedListings: this.getPagedListings(newValue)
-      };
-    });
+        return {
+          currentPage: newValue,
+          gridClassName: this.pageToGridClassName(newValue)
+        };
+      },
+      () => {
+        const pageData = this.getPagedListings(this.state.currentPage);
+        this.fetchListings(pageData.page, pageData.pageSize);
+      }
+    );
   };
 
   render() {
@@ -90,7 +110,7 @@ export default class ListingsPager extends Component {
       <div className="listings-pager">
         <PhotoGrid
           className={this.state.gridClassName}
-          listings={this.state.pagedListings}
+          listings={this.state.listings}
         />
         <div className="button-container">
           <button onClick={this.onPrevClick}>prev</button>
