@@ -1,10 +1,16 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 
-export default class Nav extends Component {
+export class Nav extends Component {
   render() {
+    console.log(this.props);
     return (
-      <div>
+      <div
+        style={{
+          display:
+            this.props.location.pathname === "/part-two" ? "none" : "block"
+        }}
+      >
         <nav className="nav-container">
           <NavLink className="NavLink" exact to="/">
             All
@@ -23,3 +29,4 @@ export default class Nav extends Component {
     );
   }
 }
+export default withRouter(Nav);

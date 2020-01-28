@@ -1,7 +1,7 @@
 const apiUrl = "https://sv-reqres.now.sh/api/";
 
-export const getListings = async () => {
-  return fetch(`${apiUrl}listings`)
+export const getListings = async (pageSize = 10) => {
+  return fetch(`${apiUrl}listings?per_page=${pageSize}`)
     .then(res => {
       return res.json();
     })
